@@ -21,9 +21,35 @@ function Login() {
   const otpRef = useRef();
   const [showOTP, setShowOTP] = useState(false);
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const navigate = useNavigate();
   const toast = useToast();
-  const { signInWithGoogle, currentUser, setCurrentUser } = UserAuth();
+
+  const {
+    signInWithGoogle,
+    signInWithEmail,
+    currentUser,
+    setCurrentUser,
+  } = UserAuth();
+
+  const handleLoginWithEmail = async () => {
+    setLoading(true);
+    try {
+      await signInWithEmail(email, password);
+      toast({ title: "Login successful", status: "success", position: "top" });
+    } catch (err) {
+      toast({
+        title: "Login failed",
+        description: err.message,
+        status: "error",
+        position: "top",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSignInWithGoogle = async () => {
     try {
@@ -39,9 +65,7 @@ function Login() {
         "recaptcha-container",
         {
           size: "invisible",
-          callback: (response) => {
-            onSignIn();
-          },
+          callback: () => onSignIn(),
           "expired-callback": () => {},
         },
         auth
@@ -70,6 +94,12 @@ function Login() {
       })
       .catch((error) => {
         console.log(error);
+        toast({
+          title: "OTP sending failed",
+          description: error.message,
+          status: "error",
+          position: "top",
+        });
         setLoading(false);
       });
   };
@@ -84,70 +114,103 @@ function Login() {
       })
       .catch((error) => {
         console.log(error);
+        toast({
+          title: "OTP verification failed",
+          description: error.message,
+          status: "error",
+          position: "top",
+        });
+        setLoading(false);
       });
   };
 
   useEffect(() => {
     if (currentUser) {
-      return navigate("/");
+      navigate("/");
     }
   }, [currentUser, navigate]);
 
   return (
-    <Center className="login" w={"100%"} h={"100dvh"} px={"10px"}>
-      <Flex flexDir={"column"} maxW={"max-content"} w={"100%"}>
-        <Box id="recaptcha-container"></Box>
+    <Center w="100%" h="100dvh" px="10px">
+      <Flex flexDir="column" maxW="400px" w="100%" gap="20px">
+        <Box id="recaptcha-container" />
+
+        {/* OTP or Phone Auth */}
         {showOTP ? (
-          <Flex
-            gap={"10px"}
-            flexDir={"column"}
-            align={"center"}
-            className="otp-container"
-            textAlign={"center"}>
-            <Text fontSize={"lg"}>Enter the OTP</Text>
+          <Flex gap="10px" flexDir="column" align="center">
+            <Text fontSize="lg">Enter the OTP</Text>
             <Input ref={otpRef} autoFocus textAlign="center" type="number" />
             <Button
               onClick={onRecieveOTP}
               isLoading={loading}
               colorScheme="blue"
-              mt={"10px"}>
+              mt="10px"
+            >
               Verify OTP
             </Button>
           </Flex>
         ) : (
-          <Flex
-            gap={"10px"}
-            flexDir={"column"}
-            align={"center"}
-            className="phone-container"
-            textAlign={"center"}>
-            <Text fontSize={"lg"}>Sign in with phone number</Text>
+          <Flex gap="10px" flexDir="column" align="center">
+            <Text fontSize="lg">Sign in with phone number</Text>
             <PhoneInput
               value={phone}
               onChange={setPhone}
-              country={"in"}
+              country="id"
               className="phone-input"
             />
             <Button
               isLoading={loading}
               onClick={onSignIn}
               colorScheme="blue"
-              mt={"10px"}>
-              Recieve OTP
+              mt="10px"
+            >
+              Receive OTP
             </Button>
           </Flex>
         )}
-        <Flex my={"25px"} align={"center"} px={"10%"}>
+
+        {/* Divider */}
+        <Flex my="25px" align="center" px="10%">
           <Divider />
-          <Text px={"15px"}>OR</Text>
+          <Text px="15px">OR</Text>
           <Divider />
         </Flex>
-        <button
-          onClick={handleSignInWithGoogle}
-          type="button"
-          className="google-sign-in-button">
+
+        {/* Google Sign-in */}
+        <Button onClick={handleSignInWithGoogle} colorScheme="red">
           Sign in with Google
-        </button>
+        </Button>
+
+        {/* Email & Password */}
+        <Text fontSize="lg" mt="20px">
+          Sign in with Email
+        </Text>
+        <Input
+          color="black"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+        color="black"
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button
+          isLoading={loading}
+          onClick={handleLoginWithEmail}
+          colorScheme="teal"
+        >
+          Login
+        </Button>
+        <Text>
+          Don&apos;t have an account?{" "}
+          <a href="/register" style={{ color: "blue" }}>
+            Register
+          </a>
+        </Text>
       </Flex>
     </Center>
   );

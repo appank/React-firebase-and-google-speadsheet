@@ -1,49 +1,53 @@
-import { Button, Center, Text } from "@chakra-ui/react";
 import React, { useState } from "react";
+import { Button, Box, Text, Flex } from "@chakra-ui/react";
 import { UserAuth } from "../context/AuthContext";
-import Navbar from "../components/Navbar";
+import DashboardLayout from "../components/DashboardLayout";
+import FormInput from "../components/FormInput";
+import OtherForm from "../components/OtherForm";
 
 function Home() {
   const [loading, setLoading] = useState(false);
+  const [activePage, setActivePage] = useState("formInput"); // 🆕 halaman yang aktif
   const { currentUser, logOutUser } = UserAuth();
 
   const handleLogout = async () => {
     try {
       setLoading(true);
       await logOutUser();
-      setLoading(false);
     } catch (error) {
-      setLoading(false);
       console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+  // 🔀 Ganti konten sesuai halaman/form aktif
+  const renderPage = () => {
+    switch (activePage) {
+      case "formInput":
+        return <FormInput />;
+      case "otherForm":
+        return <OtherForm />;
+      default:
+        return <Text color="gray.600">Pilih menu di sidebar</Text>;
     }
   };
 
   return (
-    <Center
-      px={"10px"}
-      textAlign={"center"}
-      flexDir={"column"}
-      gap={"20px"}
-      className="home"
-      w={"100%"}
-      h={"100dvh"}>
-      <Navbar currentUser={currentUser} />
-      <Text fontSize={"4xl"}>
-        Welcome back,{" "}
-        <span style={{ fontWeight: "bold" }}>
-          {currentUser.displayName ? currentUser.displayName : "User"}
-        </span>
-      </Text>
-      {currentUser && (
-        <Button
-          isLoading={loading}
-          onClick={handleLogout}
-          colorScheme="red"
-          variant={"outline"}>
-          Logout
-        </Button>
-      )}
-    </Center>
+    <DashboardLayout
+      user={currentUser}
+      onLogout={handleLogout}
+      onSelectPage={setActivePage} // 🆕 lempar ke layout
+    >
+      <Box mb={6}>
+        <Flex justify="space-between" align="center">
+          <Text fontSize="3xl" fontWeight="bold" color="black">
+            Welcome back, {currentUser?.displayName || "User"}
+          </Text>
+        </Flex>
+      </Box>
+
+      {renderPage()}
+    </DashboardLayout>
   );
 }
 

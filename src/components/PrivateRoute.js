@@ -5,11 +5,17 @@ import { UserAuth } from "../context/AuthContext";
 function PrivateRoute({ children }) {
   const { currentUser } = UserAuth();
 
+  if (currentUser === undefined) {
+    // You can return a loader or null
+    return <div>Loading...</div>;
+  }
+
   if (!currentUser) {
     return <Navigate to={"/login"} />;
   }
 
   return children;
 }
+
 
 export default PrivateRoute;
