@@ -134,6 +134,44 @@ app.post("/add", async (req, res) => {
     }
   });
   
+  // Endpoint DELETE
+  app.put("/update/:id", async (req, res) => {
+    const { id } = req.params;
+    const { name, email } = req.body;
+  
+    try {
+      const client = await auth.getClient();
+      const sheets = google.sheets({ version: "v4", auth: client });
+  
+      const getRows = await sheets.spreadsheets.values.get({
+        spreadsheetId,
+        range: "Sheet1!A:C", // Mulai dari baris 1 agar ID ditemukan
+      });
+  
+      const rows = getRows.data.values;
+      const rowIndex = rows.findIndex((row) => String(row[0]).trim() === String(id).trim());
+  
+      if (rowIndex === -1) {
+        return res.status(404).json({ error: "Data tidak ditemukan" });
+      }
+  
+      const rangeToUpdate = `Sheet1!A${rowIndex + 1}:C${rowIndex + 1}`; // +1 karena Google Sheets index 1-based
+      await sheets.spreadsheets.values.update({
+        spreadsheetId,
+        range: rangeToUpdate,
+        valueInputOption: "USER_ENTERED",
+        requestBody: {
+          values: [[id, name, email]],
+        },
+      });
+  
+      res.json({ message: "✅ Data berhasil diperbarui" });
+    } catch (err) {
+      console.error("❌ Gagal update data:", err);
+      res.status(500).json({ error: "Gagal update data" });
+    }
+  });
+  
   
 // Jalankan server
 app.listen(port, () => {
