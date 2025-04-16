@@ -4,6 +4,7 @@ import { UserAuth } from "../context/AuthContext";
 import DashboardLayout from "../components/DashboardLayout";
 import FormInput from "../components/FormInput";
 import OtherForm from "../components/OtherForm";
+import WriteTable from "../components/writetabel";
 
 function Home() {
   const [loading, setLoading] = useState(false);
@@ -25,6 +26,8 @@ function Home() {
     switch (activePage) {
       case "formInput":
         return <FormInput />;
+      case "editData":
+        return <WriteTable />;  
       case "otherForm":
         return <OtherForm />;
       default:

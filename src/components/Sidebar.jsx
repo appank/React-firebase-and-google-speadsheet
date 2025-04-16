@@ -9,7 +9,7 @@ import {
   DrawerContent,
   DrawerHeader,
 } from "@chakra-ui/react";
-import { FiHome, FiUser, FiSettings } from "react-icons/fi";
+import { FiHome, FiUser, FiSettings, FiDatabase } from "react-icons/fi";
 
 const Sidebar = ({ isOpen, onClose, onSelectPage }) => {
   return (
@@ -53,6 +53,7 @@ const SidebarContent = ({ onItemClick = () => {} }) => (
   <VStack align="start" spacing="20px">
     <SidebarItem icon={FiHome} label="Dashboard" onClick={() => onItemClick("dashboard")} />
     <SidebarItem icon={FiUser} label="Input Data" onClick={() => onItemClick("formInput")} />
+    <SidebarItem icon={FiDatabase} label="Edit Data" onClick={() => onItemClick("editData")} />
     <SidebarItem icon={FiSettings} label="Lainnya" onClick={() => onItemClick("otherForm")} />
   </VStack>
 );
