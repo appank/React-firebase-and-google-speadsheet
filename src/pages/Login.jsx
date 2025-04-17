@@ -8,19 +8,20 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect,  useState } from "react";
 import { UserAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
-import PhoneInput from "react-phone-input-2";
-import "react-phone-input-2/lib/style.css";
-import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
-import { auth } from "../firebase/FirebaseConfig";
+//import PhoneInput from "react-phone-input-2";
+//import "react-phone-input-2/lib/style.css";
+//import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+//import { auth } from "../firebase/FirebaseConfig";
+import { Link } from "react-router-dom";
 
 function Login() {
   const [loading, setLoading] = useState(false);
-  const otpRef = useRef();
-  const [showOTP, setShowOTP] = useState(false);
-  const [phone, setPhone] = useState("");
+ // const otpRef = useRef();
+ // const [showOTP, setShowOTP] = useState(false);
+  //const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -31,7 +32,7 @@ function Login() {
     signInWithGoogle,
     signInWithEmail,
     currentUser,
-    setCurrentUser,
+    //setCurrentUser,
   } = UserAuth();
 
   const handleLoginWithEmail = async () => {
@@ -59,70 +60,70 @@ function Login() {
     }
   };
 
-  const CaptchaVerify = () => {
-    if (!window.recaptchaVerifier) {
-      window.recaptchaVerifier = new RecaptchaVerifier(
-        "recaptcha-container",
-        {
-          size: "invisible",
-          callback: () => onSignIn(),
-          "expired-callback": () => {},
-        },
-        auth
-      );
-    }
-  };
+  // const CaptchaVerify = () => {
+  //   if (!window.recaptchaVerifier) {
+  //     window.recaptchaVerifier = new RecaptchaVerifier(
+  //       "recaptcha-container",
+  //       {
+  //         size: "invisible",
+  //         callback: () => onSignIn(),
+  //         "expired-callback": () => {},
+  //       },
+  //       auth
+  //     );
+  //   }
+  // };
 
-  const onSignIn = () => {
-    setLoading(true);
-    CaptchaVerify();
+  // const onSignIn = () => {
+  //   setLoading(true);
+  //   CaptchaVerify();
 
-    const verifier = window.recaptchaVerifier;
-    const number = "+" + phone;
+  //   const verifier = window.recaptchaVerifier;
+  //   const number = "+" + phone;
 
-    signInWithPhoneNumber(auth, number, verifier)
-      .then((confirmationResult) => {
-        window.confirmationResult = confirmationResult;
-        setLoading(false);
-        setShowOTP(true);
-        toast({
-          title: `OTP sent successfully!`,
-          status: "success",
-          isClosable: true,
-          position: "top",
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-        toast({
-          title: "OTP sending failed",
-          description: error.message,
-          status: "error",
-          position: "top",
-        });
-        setLoading(false);
-      });
-  };
+  //   signInWithPhoneNumber(auth, number, verifier)
+  //     .then((confirmationResult) => {
+  //       window.confirmationResult = confirmationResult;
+  //       setLoading(false);
+  //       setShowOTP(true);
+  //       toast({
+  //         title: `OTP sent successfully!`,
+  //         status: "success",
+  //         isClosable: true,
+  //         position: "top",
+  //       });
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       toast({
+  //         title: "OTP sending failed",
+  //         description: error.message,
+  //         status: "error",
+  //         position: "top",
+  //       });
+  //       setLoading(false);
+  //     });
+  // };
 
-  const onRecieveOTP = () => {
-    setLoading(true);
-    window.confirmationResult
-      .confirm(otpRef.current.value)
-      .then(async (response) => {
-        await setCurrentUser(response.user);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.log(error);
-        toast({
-          title: "OTP verification failed",
-          description: error.message,
-          status: "error",
-          position: "top",
-        });
-        setLoading(false);
-      });
-  };
+  // const onRecieveOTP = () => {
+  //   setLoading(true);
+  //   window.confirmationResult
+  //     .confirm(otpRef.current.value)
+  //     .then(async (response) => {
+  //       await setCurrentUser(response.user);
+  //       setLoading(false);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error);
+  //       toast({
+  //         title: "OTP verification failed",
+  //         description: error.message,
+  //         status: "error",
+  //         position: "top",
+  //       });
+  //       setLoading(false);
+  //     });
+  // };
 
   useEffect(() => {
     if (currentUser) {
@@ -136,7 +137,7 @@ function Login() {
         <Box id="recaptcha-container" />
 
         {/* OTP or Phone Auth */}
-        {showOTP ? (
+        {/* {showOTP ? (
           <Flex gap="10px" flexDir="column" align="center">
             <Text fontSize="lg">Enter the OTP</Text>
             <Input ref={otpRef} autoFocus textAlign="center" type="number" />
@@ -167,19 +168,9 @@ function Login() {
               Receive OTP
             </Button>
           </Flex>
-        )}
+        )} */}
 
-        {/* Divider */}
-        <Flex my="25px" align="center" px="10%">
-          <Divider />
-          <Text px="15px">OR</Text>
-          <Divider />
-        </Flex>
-
-        {/* Google Sign-in */}
-        <Button onClick={handleSignInWithGoogle} colorScheme="red">
-          Sign in with Google
-        </Button>
+       
 
         {/* Email & Password */}
         <Text fontSize="lg" mt="20px">
@@ -205,12 +196,23 @@ function Login() {
         >
           Login
         </Button>
-        <Text>
-          Don&apos;t have an account?{" "}
-          <a href="/register" style={{ color: "blue" }}>
-            Register
-          </a>
-        </Text>
+        <Text color="gray.600">
+  Don't have an account?{" "}
+  <Link to="/register" style={{ color: "blue" }}>
+    Register
+  </Link>
+</Text>
+ {/* Divider */}
+ <Flex my="25px" align="center" px="10%">
+          <Divider />
+          <Text px="15px">OR</Text>
+          <Divider />
+        </Flex>
+
+        {/* Google Sign-in */}
+        <Button onClick={handleSignInWithGoogle} colorScheme="red">
+          Sign in with Google
+        </Button>
       </Flex>
     </Center>
   );
