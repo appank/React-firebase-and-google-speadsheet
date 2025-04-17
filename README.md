@@ -1,7 +1,7 @@
 
-# Firebase Authentication
+# React + Firebase Authentication + Express API + Google Sheets
 
-A basic login page made with react which supports Authentication via Phone number & Google account.
+A basic login page made with react which supports Authentication Google account.
 
 
 ## Features
@@ -48,7 +48,7 @@ instal Libraray Chakra-UI
   npm install @chakra-ui/react @emotion/react @emotion/styled framer-motion
 ```
 ----------------------------------------------------------------
-## Install  Express googleapis
+## Install  Express googleapis (Middleware API)
 
 new Folder Server
 
