@@ -7,6 +7,7 @@ A basic login page made with react which supports Authentication via Phone numbe
 ## Features
 
 - Login with Phone number
+- Login with email & password
 - Login with Google account
 
 
@@ -18,6 +19,7 @@ Clone the project
 ```bash
   git clone https://github.com/NinadVyas/AuthFirebase.git
 ```
+
 
 Install dependencies
 
@@ -31,6 +33,42 @@ Start the server
   npm run start
 ```
 
+----------------------------------------------------------------
+## Install Chakra-UI
+
+instal Icon Chakra-ui/icons
+
+```bash
+  npm install @chakra-ui/icons
+```
+
+instal Libraray Chakra-UI
+
+```bash
+  npm install @chakra-ui/react @emotion/react @emotion/styled framer-motion
+```
+----------------------------------------------------------------
+## Install  Express googleapis
+
+new Folder Server
+
+```bash
+  mkdir server
+```
+install Server
+
+```bash
+  npm init -y
+```
+install librarry Express googleapis
+```bash
+  npm install express googleapis cors
+```
+
+Run Server (Server runing http://localhost:5000)
+```bash
+  node index.js
+```
 
 ## Tech Stack
 
