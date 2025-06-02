@@ -36,7 +36,7 @@ Start the server
 ----------------------------------------------------------------
 ## Video Result
 
-instal Icon Chakra-ui/icons
+![Result GIF](sampelproject.gif)
 
 
 ----------------------------------------------------------------
