@@ -34,19 +34,11 @@ Start the server
 ```
 
 ----------------------------------------------------------------
-## Install Chakra-UI
+## Video Result
 
 instal Icon Chakra-ui/icons
 
-```bash
-  npm install @chakra-ui/icons
-```
 
-instal Libraray Chakra-UI
-
-```bash
-  npm install @chakra-ui/react @emotion/react @emotion/styled framer-motion
-```
 ----------------------------------------------------------------
 ## Install  Express googleapis (Middleware API)
 
